@@ -69,17 +69,13 @@ class FreeChatbotWrapper:
             return "Invalid user type. Please specify 'admin' or 'customer'."
 
         # Inject relevant context
-        if user_type == "admin":
-            context = (
-                self.contexts[user_type] +
-                # "\nAvailable Coupons:\n" + self.format_coupon_data() +
-                "\nSales Data:\n" + self.format_sales_data()
-            )
-        elif user_type == "customer":
-            context = (
-                self.contexts[user_type] +
-                "\nAvailable Coupons:\n" + self.format_coupon_data()
-            )
+
+        context = (
+            self.contexts[user_type] +
+            # "\nAvailable Coupons:\n" + self.format_coupon_data() +
+            "\nSales Data:\n" + self.format_sales_data()
+        )
+
         # Create the prompt
         prompt = f"""
         {context}
