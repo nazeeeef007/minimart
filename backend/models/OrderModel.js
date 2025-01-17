@@ -7,6 +7,7 @@ const OrderSchema = new mongoose.Schema({
     ref: 'User', // Linking to the User model
     required: true
   },
+  username: { type: String, required: true }, // Add this if missing
   items: [
     {
       productId: {
@@ -43,8 +44,12 @@ const OrderSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['Pending', 'Completed', 'Canceled'],
+    enum: ['Pending', 'Completed', 'Rejected'],
     default: 'Pending'
+  },
+  rejectionDescription: {
+    type: String, // Non-required field to store rejection reason
+    default: null
   },
   date: {
     type: Date,

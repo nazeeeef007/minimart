@@ -1,5 +1,5 @@
 const express = require('express');
-const { signup, login, resetPassword} = require('../controllers/AuthController');
+const { signup, login, logout} = require('../controllers/AuthController');
 const { verifyToken, authorizeRole } = require('../middleware/AuthMiddleware');
 const { checkRole } = require('../middleware/CheckRole'); // New role-checking middleware
 
@@ -8,7 +8,7 @@ const router = express.Router();
 // Public routes
 router.post('/signup', signup);
 router.post('/login', login);
-
+router.post('/logout', logout);
 
 // Protected routes for residents
 router.get('/resident/dashboard', 

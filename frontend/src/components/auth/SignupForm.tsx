@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-
+import { toast } from 'react-toastify';  // Import toast
+import 'react-toastify/dist/ReactToastify.css';  // Import CSS for styling
 export const SignupForm: React.FC = () => {
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
@@ -18,6 +19,7 @@ export const SignupForm: React.FC = () => {
       const response = await axios.post('http://localhost:5000/api/auth/signup', { email, username, password, role });
       // Handle successful signup (redirect, show success message, etc.)
       console.log('Signup successful:', response.data);
+      toast.success(response.data.message); // Use the message returned from the API
     } catch (err: any) {
       setError(err.response?.data?.message || 'Signup failed. Please try again.');
     } finally {

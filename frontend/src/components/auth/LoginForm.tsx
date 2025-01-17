@@ -16,26 +16,27 @@ const LoginForm: React.FC = () => {
 
     try {
       const response = await axios.post('http://localhost:5000/api/auth/login', { username, password });
-      const { token, role } = response.data;
+      const { token, role, userId, username: loggedInUsername } = response.data;
 
-      // Save token and role in localStorage
+      // Save token and other data in localStorage
       localStorage.setItem('token', token);
       localStorage.setItem('role', role);
-      localStorage.setItem('userId', response.data.userId); // Store user ID
-      console.log("Token:", token);
-        console.log("Role:", role); // Debug: Check role after login
-
-        // Redirect based on role
-        console.log('Redirecting to:', role);
-
+      localStorage.setItem('userId', userId);
+      localStorage.setItem('username', loggedInUsername);
+      
       // Redirect based on role
       if (role === 'resident') {
-        navigate('/resident'); // Redirect to ResidentPage
+        navigate('/resident');
       } else if (role === 'admin') {
-        navigate('/admin'); // Redirect to AdminPage (uncomment when the admin page is ready)
+        navigate('/admin');
       }
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Login failed. Please try again.');
+      // Check if the error is related to suspended account
+      if (err.response?.status === 403) {
+        setError('Your account is suspended. Please contact support.');
+      } else {
+        setError(err.response?.data?.message || 'Login failed. Please try again.');
+      }
     } finally {
       setLoading(false);
     }

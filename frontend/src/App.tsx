@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import AuthPage from '@/pages/AuthPage';
-import ResidentPage from '@/pages/ResidentPage'; // Import the Resident page
-// import AdminPage from '@/pages/AdminPage'; // Import the Admin page
+import ResidentPage from '@/pages/ResidentPage';
+import AdminPage from '@/pages/AdminPage';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const App: React.FC = () => {
   const [role, setRole] = useState<string | null>(null);
@@ -12,20 +14,28 @@ const App: React.FC = () => {
     setRole(storedRole);
   }, []);
 
+  useEffect(() => {
+    // Update role state when localStorage changes
+    const handleStorageChange = () => {
+      const updatedRole = localStorage.getItem('role');
+      setRole(updatedRole);
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
+
   return (
     <Router>
+      <ToastContainer />
       <Routes>
-        {/* Define the root route */}
         <Route path="/" element={<AuthPage />} />
-
-        {/* Define the /auth route */}
         <Route path="/auth" element={<AuthPage />} />
-
-        {/* Conditionally route based on role */}
         {role === 'resident' && <Route path="/resident" element={<ResidentPage />} />}
-        {/* {role === 'admin' && <Route path="/admin" element={<AdminPage />} />} */}
-
-        {/* Other routes */}
+        {role === 'admin' && <Route path="/admin" element={<AdminPage />} />}
       </Routes>
     </Router>
   );

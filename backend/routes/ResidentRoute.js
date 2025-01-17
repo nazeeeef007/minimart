@@ -1,9 +1,14 @@
 const express = require('express');
-const { verifyToken, authorizeRole } = require('../middleware/AuthMiddleware'); // Use middleware for role-based access
+const { verifyToken, authorizeRole, } = require('../middleware/AuthMiddleware'); // Use middleware for role-based access
 const { getVoucherBalance,
     getTransactionHistory,getProduct,
     checkout,
-    resetPassword } = require('../controllers/ResidentController'); // Import the controller for resident operations
+    resetPassword, 
+    markNotificationsAsRead,
+    getNotifications, submitVoucherRequest,
+    getVoucherOptions,
+    getAuctions,
+    placeBid} = require('../controllers/ResidentController'); // Import the controller for resident operations
 
 const router = express.Router();
 
@@ -23,12 +28,19 @@ router.post('/reset-password', verifyToken, authorizeRole(['resident']), resetPa
 // Route for a resident to get a product by id
 router.get('/product', verifyToken, authorizeRole(['resident']), getProduct);
 
-// Route for a resident to buy a product
-// router.post('/buy-product', verifyToken, authorizeRole(['resident']), requestProduct);
+router.patch('/markNotificationsAsRead', verifyToken,authorizeRole(['resident']),markNotificationsAsRead);
+router.get('/notifications', verifyToken, authorizeRole(['resident']), getNotifications);
 
-// // Route for a resident to preorder an out-of-stock product
-// router.post('/preorder-product', verifyToken, authorizeRole(['resident']), preorderProduct);
+router.post('/submitVoucherRequest', 
+    verifyToken, 
+    authorizeRole(['resident']), 
+    submitVoucherRequest  // Submit the voucher request
+);
 
-
-
+router.get('/getVoucherOptions', verifyToken, authorizeRole(['resident']), getVoucherOptions);
+router.get('/getAuctions', verifyToken, authorizeRole(['resident']), getAuctions);
+router.put('/placeBid/:productId', verifyToken, authorizeRole(['resident']), (req, res, next) => {
+    console.log('Request received at /placeBid with productId:', req.params.productId);
+    next();
+  }, placeBid);
 module.exports = router;
