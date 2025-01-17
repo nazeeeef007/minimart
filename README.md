@@ -37,15 +37,15 @@ minimart/
 ├── frontend/
 │   ├── src/
 │   │   ├── components/
-│   │   │   └── chatbot/ChatUi.tsx
+│   │   │   
 │   │   ├── pages/
 │   │   ├── App.tsx
 │   │   └── main.tsx
 │   └── public/
 ├── backend/
-│   ├── GenAI/
-│   │   ├── chatBot.py
-│   │   └── requirements.txt
+│   |
+│   │   
+│   │   
 │   ├── models/
 │   ├── routes/
 │   └── server.js
